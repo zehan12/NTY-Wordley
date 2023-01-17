@@ -14,7 +14,7 @@ function App() {
       {/* </div> */}
 
       <div className='mx-auto bg-white w-96 relative h-screen'>
-        <main className="grid grid-rows-6 gap-1">
+        <main className="grid grid-rows-6 gap-1 mt-6">
           <WordRow lettersProps="f" />
           <WordRow lettersProps='fu' />
           <WordRow lettersProps='fuc' />

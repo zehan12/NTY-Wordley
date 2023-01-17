@@ -14,22 +14,61 @@ export const LetterState = Object.freeze({
 });
 
 
-export const computeGuess = (guess, answereStirng) => {
+export const computeGuess = (guess, answerString) => {
     const result = [];
-    const guessArray = guess.split("");
-    const answerArray = answereStirng.split("");
-    // create an array with the same length as the answer string
-    // and fill it with Miss as default
-    const output = Array(answereStirng.length).fill(LetterState.Miss);
 
-    guessArray.forEach((letter, index) => {
-        if (letter === answerArray[index]) {
-            output[index] = LetterState.Match;
-        } else if (answerArray.includes(letter)) {
-            output[index] = LetterState.Present;
+    if (guess.length !== answerString.length) {
+        return result;
+    }
+
+    const answer = answerString.split('');
+
+    const guessAsArray = guess.split('');
+
+    const answerLetterCount = {};
+
+
+    guessAsArray.forEach((letter, index) => {
+        const currentAnswerLetter = answer[index];
+
+        answerLetterCount[currentAnswerLetter] = answerLetterCount[
+            currentAnswerLetter
+        ]
+            ? answerLetterCount[currentAnswerLetter] + 1
+            : 1;
+
+        if (currentAnswerLetter === letter) {
+            result.push(LetterState.Match);
+        } else if (answer.includes(letter)) {
+            result.push(LetterState.Present);
+        } else {
+            result.push(LetterState.Miss);
         }
     });
 
-    return output;
-}
+    result.forEach((curResult, resultIndex) => {
+        if (curResult !== LetterState.Present) {
+            return;
+        }
 
+        const guessLetter = guessAsArray[resultIndex];
+
+        answer.forEach((currentAnswerLetter, answerIndex) => {
+            if (currentAnswerLetter !== guessLetter) {
+                return;
+            }
+
+            if (result[answerIndex] === LetterState.Match) {
+                result[resultIndex] = LetterState.Miss;
+            }
+
+            if (answerLetterCount[guessLetter] <= 0) {
+                result[resultIndex] = LetterState.Miss;
+            }
+        });
+
+        answerLetterCount[guessLetter]--;
+    });
+
+    return result;
+}
