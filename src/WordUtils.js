@@ -1,8 +1,9 @@
 import word from "./wordle-bank.json";
 
 
+const words = getRandomWord()
 
-export const getRandomWord = () => {
+export function getRandomWord (){
     const randomIndex = Math.floor(Math.random() * word.length);
     return word[randomIndex];
 }
@@ -13,8 +14,9 @@ export const LetterState = Object.freeze({
     Match: 'Match'
 });
 
+console.log(words)
 
-export const computeGuess = (guess, answerString) => {
+export const computeGuess = (guess, answerString = words) => {
     const result = [];
 
     if (guess.length !== answerString.length) {
